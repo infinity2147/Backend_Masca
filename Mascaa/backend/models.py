@@ -13,15 +13,15 @@ class User(models.Model):
     def __str__(self):
         return self.Roll_no
 
-class Admin(models.Model):
+class lib_Admin(models.Model):
     ldap_id = models.CharField(max_length = 50)
     passcode = models.CharField( max_length = 12 )
     Name = models.CharField(max_length = 300)
     DOB = models.CharField(max_length = 300)
     POR = models.CharField(max_length = 300)
-    Admin_no = models.CharField(max_length = 300)
+    lib_Admin_no = models.CharField(max_length = 300)
     Address = models.CharField(max_length = 500)
 
 
     def __str__(self):
-        return self.Roll_no
+        return self.Admin_no
