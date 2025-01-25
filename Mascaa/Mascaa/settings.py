@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'books',   #created for books data
 ]
 
+import os
+# Media settings for file uploads
+MEDIA_URL = '/media/'  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # File system path where media files will be stored
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

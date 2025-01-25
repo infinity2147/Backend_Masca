@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ book.book_name }}</title>
+    <title>{{ the_book.book_name }}</title>
 </head>
 <body>
-    <h1>{{ book.book_name }}</h1>
-    {% if book.cover_page %}
-        <img src="{{ book.cover_page.url }}" alt="Cover page of {{ book.book_name }}">
+    <h1>{{ the_book.book_name }}</h1>
+    {% if the_book.cover_page %}
+        <img src="{{ the_book.cover_page.url }}" alt="Cover page of {{ the_book.book_name }}">
     {% endif %}
-    <p><strong>Author:</strong> {{ book.author_name }}</p>
-    <p><strong>Published Year:</strong> {{ book.published_year }}</p>
-    <p><strong>Subject:</strong> {{ book.subject }}</p>
-    <p><strong>Availability:</strong> {{ book.availability|yesno:"Yes,No" }}</p>
-    <p><strong>Location:</strong> {{ book.location }}</p>
-    
+    <p><strong>Author:</strong> {{ the_book.author_name }}</p>
+    <p><strong>Published Year:</strong> {{ the_book.published_year }}</p>
+    <p><strong>Subject:</strong> {{ the_book.subject }}</p>
+    <p><strong>Availability:</strong> {% if the_book.available_copies > 0 %}Yes{% else %}No{% endif %}</p>
+    <p><strong>Location:</strong> {{ the_book.location }}</p>
+    <p><strong>Total Copies:</strong> {{ the_book.total_copies }}</p>
+    <p><strong>Available Copies:</strong> {{ the_book.available_copies }}</p>
+
+    {% if user.is_authenticated %}
+    {% if the_book.available_copies > 0 %}
+        <a href="{% url 'take_book' the_book.id %}">Take Book</a>
+    {% else %}
+        <a href="{% url 'return_book' the_book.id %}">Return Book</a>
+    {% endif %}
+{% endif %}
 </body>
 </html>
