@@ -22,6 +22,20 @@
     {% else %}
         <a href="{% url 'return_book' the_book.id %}">Return Book</a>
     {% endif %}
-{% endif %}
+    {% endif %}
+    
+    {% if the_book.reviews.all %}
+                <ul>
+                    {% for review in the_book.reviews.all %}
+                        <li>
+                            <strong>{{ review.user.username }}</strong> ({{ review.rating }} stars) <br>
+                            <em>{{ review.comment }}</em>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reviews yet. Be the first to review this book!</p>
+            {% endif %}
+
 </body>
 </html>
