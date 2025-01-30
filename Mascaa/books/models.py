@@ -13,7 +13,7 @@ class book(models.Model):
     total_copies = models.IntegerField(default=1)
     available_copies=models.IntegerField(default=1)
     location = models.CharField(max_length=250)
-    avg_rating = models.FloatField(default=0.0)
+    avg_rating = models.FloatField(default=None)
     ratings_count = models.PositiveIntegerField(default=0)
     
     def __str__(self):
@@ -25,6 +25,7 @@ class book(models.Model):
             self.save()
             return True
         return False
+    
     def return_book(self):
         if self.available_copies < self.total_copies:
             self.available_copies += 1
@@ -39,25 +40,32 @@ class book(models.Model):
     def availability_status(self):
         return "Yes" if self.is_available() else "No"
     
-    
+    def new_avg_rating(self,new_point):
+        self.ratings_count += 1
+        self.avg_rating = ((self.avg_rating * (self.ratings_count - 1)) + new_point ) / self.ratings_count
+        self.save()
     
 class Rating(models.Model):
-    book = models.ForeignKey(book, related_name="ratings", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.PositiveSmallIntegerField()  
+    the_book = models.ForeignKey(book, related_name="ratings", on_delete=models.CASCADE)
+    the_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.PositiveSmallIntegerField(choices=[(i,i) for i in range(1,6)])  
     rated_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('book', 'user')
+        unique_together = ('the_book', 'the_user')
+        
 
     def __str__(self):
-        return f'{self.user.username} rated {self.book.title} - {self.score}'
+        return f'{self.the_user.username} rated {self.the_book.book_name} - {self.score}'
+    
+        
+        
     
 class Review(models.Model):
-    book = models.ForeignKey(book, related_name="reviews", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    the_book = models.ForeignKey(book, related_name="reviews", on_delete=models.CASCADE)
+    the_user = models.ForeignKey(User, on_delete=models.CASCADE)
     review_text = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user.username} reviewed {self.book.title}'  
+        return f'{self.the_user.username} reviewed {self.the_book.book_name}'  
