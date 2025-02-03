@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class book(models.Model):
     book_name = models.CharField(max_length=200)
     author_name = models.CharField(max_length=100)
-    cover_page = models.ImageField(upload_to='cover_page/', blank=True, null=True)
+    cover_page = models.ImageField(upload_to='cover_page/',default='cover_page/67d525a6-7901-4ee3-b0f8-3a4cf020a0de.webp')
     published_year = models.IntegerField()
     subject = models.CharField(max_length=50)  
     total_copies = models.IntegerField(default=1)
