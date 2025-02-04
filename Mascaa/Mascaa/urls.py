@@ -20,6 +20,8 @@ from django.conf.urls.static import static
 from django.urls import path , include
 
 urlpatterns = [
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/',include('Mascaa.api.urls')),
     path("backend/", include("backend.urls")),
     path('admin/', admin.site.urls),
     path('',include('books.urls')),
