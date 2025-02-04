@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'books',   #created for books data
     'rest_framework',#API 
-    'corsheaders',#for integration
+#     'corsheaders',#for integration
 ]
 
 CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
@@ -140,3 +140,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = 'backend.User'  # Point Django to  User model

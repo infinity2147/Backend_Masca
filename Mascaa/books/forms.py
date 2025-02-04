@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Review,Rating
+from .models import Review,Rating,book
 
 class ReviewForm(forms.ModelForm):
     class Meta:
@@ -17,4 +17,8 @@ class RatingForm(forms.ModelForm):
         labels = {'score': 'Rate this Book'}
         widgets = {'score': forms.Select(choices=[(i, f'{i} stars') for i in range(1, 6)]),}       
 
-            
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = book
+        fields = ['book_name', 'author_name', 'cover_page', 'published_year', 'subject', 'total_copies', 'location' ]
+        

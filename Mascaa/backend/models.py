@@ -24,6 +24,7 @@ class User(models.Model):
     Hostel = models.CharField(max_length = 10)
     Room = models.PositiveIntegerField
 
+    REQUIRED_FIELDS = ['ldap_id'] #to tackle error
     def __str__(self):
         return self.Roll_no
 

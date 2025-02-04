@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import book, Rating, Review
+from .models import book, Rating, Review,Borrow_History
+from backend.models import User
 from django.contrib import messages 
 from django.contrib.auth.decorators import login_required
-from .forms import ReviewForm,RatingForm
+from .forms import ReviewForm,RatingForm,BookForm
+from django.utils import timezone
 
 
 def books(request):  
@@ -76,8 +78,14 @@ def book_details(request, book_id):
 
 def take_book(request, book_id):
     Book = get_object_or_404(book, id=book_id)
+    user = request.user 
 
     if Book.take_book(): 
+        Borrow_History.objects.create(
+        the_book=Book,
+        the_user=user,
+        borrow_date=timezone.now(),
+    )
         messages.success(request, f"You've successfully taken{Book.book_name}")
     else:
         messages.error(request, "Sorry, no copies are available to take.")
@@ -86,10 +94,26 @@ def take_book(request, book_id):
 
 def return_book(request, book_id):
     Book = get_object_or_404(book, id=book_id)
-
+    user = request.user
+    # Find the borrow history record for this book that is not yet returned
+    borrow_history = Borrow_History.objects.filter(the_book=Book, the_user=user, return_date__isnull=True).first()
     if Book.return_book(): 
+        borrow_history.return_date = timezone.now()
+        borrow_history.save()
         messages.success(request, f"You've successfully returned the book {Book.book_name}")
     return redirect('book_details', book_id=Book.id)
 
 
 
+# @libadmin_required
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "The book has been added successfully!")
+            return redirect('books')  # Redirect to the manage books page
+    else:
+        form = BookForm()
+    
+    return render(request, 'add_book.html', {'form': form})
