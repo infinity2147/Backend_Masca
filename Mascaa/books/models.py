@@ -66,6 +66,9 @@ class Review(models.Model):
     the_user = models.ForeignKey(User, on_delete=models.CASCADE)
     review_text = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('the_book', 'the_user')
 
     def __str__(self):
         return f'{self.the_user.username} reviewed {self.the_book.book_name}'  
