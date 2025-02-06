@@ -143,3 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'backend.User'  # Point Django to  User model
+AUTH_USER_MODEL = 'backend.lib_Admin'  # Point Django to  User model
