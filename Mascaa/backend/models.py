@@ -4,6 +4,7 @@ from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Group
 
 # Custom validator for email
 def validate_iitb_email(value):
@@ -38,6 +39,11 @@ class User(AbstractUser):
         if self.password and not self.password.startswith("pbkdf2_sha256$"):
             self.password = make_password(self.password)
         super().save(*args, **kwargs)
+
+        # Automatically add the user to the "User" group
+        user_group, _ = Group.objects.get_or_create(name="User")
+        self.groups.add(user_group)
+
     def __str__(self):
         return self.Roll_no
 
@@ -65,6 +71,9 @@ class lib_Admin(AbstractUser):
         if self.password and not self.password.startswith("pbkdf2_sha256$"):
             self.password = make_password(self.password)
         super().save(*args, **kwargs)
+         # Now assign the group
+        admin_group, _ = Group.objects.get_or_create(name="Admin")
+        self.groups.add(admin_group)  
     
     def __str__(self):
         return self.lib_Admin_no
